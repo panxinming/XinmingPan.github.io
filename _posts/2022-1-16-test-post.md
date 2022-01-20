@@ -67,6 +67,7 @@ def query_climate_database(country, year_begin, year_end, month):
     df = df[df["Year"] >= year_begin]
     df = df[df["Country"] == country]
     df = df[df["Month"] == month]
+    df["Temp"] = df["Temp"]/100
     df.index = list(range(0,df.shape[0]))
     return df
 ```
@@ -78,6 +79,72 @@ query_climate_database(country = "India",
                        month = 1)
 ```
 
+This is the head five of our answer. 
+```
++----+---------------+------------+-------------+-----------+--------+---------+--------+
+|    | NAME          |   LATITUDE |   LONGITUDE | Country   |   Year |   Month |   Temp |
++====+===============+============+=============+===========+========+=========+========+
+|  0 | PBO_ANANTAPUR |     14.583 |      77.633 | India     |   1980 |       1 |  23.48 |
++----+---------------+------------+-------------+-----------+--------+---------+--------+
+|  1 | PBO_ANANTAPUR |     14.583 |      77.633 | India     |   1981 |       1 |  24.57 |
++----+---------------+------------+-------------+-----------+--------+---------+--------+
+|  2 | PBO_ANANTAPUR |     14.583 |      77.633 | India     |   1982 |       1 |  24.19 |
++----+---------------+------------+-------------+-----------+--------+---------+--------+
+|  3 | PBO_ANANTAPUR |     14.583 |      77.633 | India     |   1983 |       1 |  23.51 |
++----+---------------+------------+-------------+-----------+--------+---------+--------+
+|  4 | PBO_ANANTAPUR |     14.583 |      77.633 | India     |   1984 |       1 |  24.81 |
++----+---------------+------------+-------------+-----------+--------+---------+--------+
+```
+
+### 3. Write a Geographic Scatter Function for Yearly Temperature Increases
+```python
+from plotly import express as px
+import numpy as np
+from sklearn.linear_model import LinearRegression
+
+def coef(data_group):
+    x = data_group[["Year"]] # 2 brackets because X should be a df
+    y = data_group["Temp"]   # 1 bracket because y should be a series
+    LR = LinearRegression()
+    LR.fit(x, y)
+    return round(LR.coef_[0], 4)
+
+
+color_map = px.colors.diverging.RdGy_r
+def temperature_coefficient_plot(country, year_begin, year_end, month, min_obs, **kwargs):
+    df = query_climate_database(country = country, 
+                                year_begin = year_begin, 
+                                year_end = year_end,
+                                month = month)   
+    df = df[df.groupby(["NAME"])["Year"].transform(len) >= min_obs]
+    df4 = pd.concat([df.groupby(["NAME"])["LATITUDE"].aggregate([np.mean]),
+                     df.groupby(["NAME"])["LONGITUDE"].aggregate([np.mean]),
+                     pd.DataFrame(df.groupby(["NAME"]).apply(coef))], axis=1)
+    column_names = df4.columns.values
+    column_names[0] = "LATITUDE"
+    column_names[1] = "LONGITUDE"
+    column_names[2] = "Estimated yearly increase(℃)"
+    df4.columns = column_names
+    df4["NAME"] = df4.index
+    fig = px.scatter_mapbox(df4, 
+                        lat = "LATITUDE",
+                        lon = "LONGITUDE",
+                        hover_name = "NAME",
+                        color = "Estimated yearly increase(℃)",
+                        **kwargs)
+    fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+    fig.show()
+```
+Let's try for the result.
+```python
+fig = temperature_coefficient_plot("India", 1980, 2020, 1, 
+                                   min_obs = 10,
+                                   zoom = 2,
+                                   mapbox_style="carto-positron",
+                                   color_continuous_scale=color_map)
+```
+
+![newplot.png]({{ site.baseurl }}/images/newplot.png)
 
 
 
