@@ -6,7 +6,7 @@ title: Blog Post 1
 
 ### 1. Create a Database
 
-Because we are going to create a database which is include three tables,
+>Because we are going to create a database which is include three tables,
 so we should load these three data first. Then, add them into our database.
 First we can import some libraries and create an empty database.
 
@@ -15,7 +15,8 @@ import pandas as pd
 import sqlite3
 conn = sqlite3.connect("database.db")
 ```
-Load data one by one.
+>Load data one by one.
+
 ```python
 # load temperature data.
 temperatures_iter = pd.read_csv("temps.csv", chunksize = 100000)
@@ -35,7 +36,8 @@ countries.rename(columns = {"ISO 3166":"ISO_3166", "FIPS 10-4": "FIPS_10-4"})
 # add countires into my data base
 countries.to_sql("countries", conn, if_exists = "replace", index = False)
 ```
-Last step, let's check what our database includes.
+>Last step, let's check what our database includes.
+
 ```python
 cursor = conn.cursor()
 cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
@@ -44,11 +46,13 @@ print(cursor.fetchall())
 ```
 [('temperatures',), ('stations',), ('countries',)]
 ```
+<br />
 
+---
 
 ### 2. Write a Query Function
+>We need to write CMD to extract data from sql.
 
-Thanks for the class notes.
 ```python
 def query_climate_database(country, year_begin, year_end, month):
     df = pd.read_csv("temps.csv")
@@ -71,7 +75,8 @@ def query_climate_database(country, year_begin, year_end, month):
     df.index = list(range(0,df.shape[0]))
     return df
 ```
-Let's try for the result.
+>Let's try for the result.
+
 ```python
 query_climate_database(country = "India", 
                        year_begin = 1980, 
@@ -79,7 +84,6 @@ query_climate_database(country = "India",
                        month = 1)
 ```
 
-This is the head five of our answer. 
 ```
 +----+---------------+------------+-------------+-----------+--------+---------+--------+
 |    | NAME          |   LATITUDE |   LONGITUDE | Country   |   Year |   Month |   Temp |
@@ -95,6 +99,9 @@ This is the head five of our answer.
 |  4 | PBO_ANANTAPUR |     14.583 |      77.633 | India     |   1984 |       1 |  24.81 |
 +----+---------------+------------+-------------+-----------+--------+---------+--------+
 ```
+<br />
+
+---
 
 ### 3. Write a Geographic Scatter Function for Yearly Temperature Increases
 ```python
@@ -135,7 +142,9 @@ def temperature_coefficient_plot(country, year_begin, year_end, month, min_obs, 
     fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
     fig.show()
 ```
-Let's try for the result.
+
+>Let's try for the result.
+
 ```python
 fig = temperature_coefficient_plot("India", 1980, 2020, 1, 
                                    min_obs = 10,
