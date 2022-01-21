@@ -133,14 +133,23 @@ def temperature_coefficient_plot(country, year_begin, year_end, month, min_obs, 
     column_names[2] = "Estimated yearly increase(℃)"
     df4.columns = column_names
     df4["NAME"] = df4.index
+    month_dic = {1 : 'January', 2 : 'February', 3 : 'March', 4 : 'April',
+                 5 : 'May', 6 : 'June', 7 : 'July', 8 : 'August', 
+                 9 : 'September', 10 : 'October', 11 : 'November',
+                 12 : 'December'}
+    month = month_dic[int(month)]
+    title = "Estimates of yearly increase in temperature in {a} for stations in {b}, years {c} - {d}"\
+            .format(a = month, b = country, c = year_begin, d = year_end)
     fig = px.scatter_mapbox(df4, 
                         lat = "LATITUDE",
                         lon = "LONGITUDE",
                         hover_name = "NAME",
+                        color_continuous_midpoint = 0,
                         color = "Estimated yearly increase(℃)",
+                        title = title,
                         **kwargs)
-    fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
-    fig.show()
+    return fig
+
 ```
 
 >Let's try for the result.
@@ -151,9 +160,13 @@ fig = temperature_coefficient_plot("India", 1980, 2020, 1,
                                    zoom = 2,
                                    mapbox_style="carto-positron",
                                    color_continuous_scale=color_map)
+fig.show()
 ```
 
-![newplot.png]({{ site.baseurl }}/images/newplot.png)
-
+```python
+import plotly.io as pio
+pio.write_html(fig, file = "dv1.html", auto_open = True)
+```
+{% include dv1.html %}
 
 
