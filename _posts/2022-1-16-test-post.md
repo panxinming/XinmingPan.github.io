@@ -152,12 +152,6 @@ fig = temperature_coefficient_plot("India", 1980, 2020, 1,
                                    color_continuous_scale=color_map)
 fig.show()
 ```
-<br />
-Save this image as html, then upload it into github.
-```python
-import plotly.io as pio
-pio.write_html(fig, file = "dv1.html", auto_open = True)
-```
 
  {% include dv1.html %}
 
@@ -198,13 +192,6 @@ def f(name, year1, year2, year3):
 
 fig = f("BRIANNA",1995,2002,2013)
 fig.show()
-```
-
-<br />
-Save our figure as html and show.
-```python
-import plotly.io as pio
-pio.write_html(fig, file = "dv2.html", auto_open = True)
 ```
 
 {% include dv2.html %}
