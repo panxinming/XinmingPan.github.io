@@ -196,6 +196,11 @@ fig.show()
 
 {% include dv2.html %}
 
+From three line charts, we can see that in different years, the Temperature changed by month is different.
+BRIANNA has higest temperature in Dec, Jan in 2013. And over the past 10 years, the temperature in Jan is becoming
+higher. This is may due to the global warming or industry development. However, the temperature in June or July is
+lower and lower over the past 10 years.
+
 <br />
 
 ### (b). If STNELEV related to Temperature Between Two Time Periods
@@ -246,5 +251,10 @@ From above, we can see that, over the past ten years. The relationship between T
 if Temperature is higher, STNELEV will become lower.
 
 
+<br />
+
+<br />
+
+<br />
 
 
