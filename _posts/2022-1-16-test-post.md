@@ -4,7 +4,7 @@ title: Blog Post 1
 ---
 
 
-### 1. Create a Database
+## 1. Create a Database
 
 >Because we are going to create a database which is include three tables,
 so we should load these three data first. Then, add them into our database.
@@ -15,7 +15,8 @@ import pandas as pd
 import sqlite3
 conn = sqlite3.connect("database.db")
 ```
->Load data one by one.
+<br />
+Load data one by one.
 
 ```python
 # load temperature data.
@@ -36,8 +37,8 @@ countries.rename(columns = {"ISO 3166":"ISO_3166", "FIPS 10-4": "FIPS_10-4"})
 # add countires into my data base
 countries.to_sql("countries", conn, if_exists = "replace", index = False)
 ```
->Last step, let's check what our database includes.
-
+<br />
+Last step, let's check what our database includes.
 ```python
 cursor = conn.cursor()
 cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
@@ -47,35 +48,33 @@ print(cursor.fetchall())
 [('temperatures',), ('stations',), ('countries',)]
 ```
 <br />
+Looks Right.
 
 ---
 
-### 2. Write a Query Function
->We need to write CMD to extract data from sql.
+## 2. Write a Query Function
+>We need to write CMD to extract data from SQL.
 
 ```python
 def query_climate_database(country, year_begin, year_end, month):
-    df = pd.read_csv("temps.csv")
-    df["FIPS 10-4"] = df["ID"].str[0:2]
-    df = pd.merge(df, countries, on = ["FIPS 10-4"])
-    df = df.drop(["FIPS 10-4", "ISO 3166"], axis = 1)
-    df = df.set_index(keys=["ID","Year", "Name"])
-    df = df.stack()
-    df = df.reset_index()
-    df = df.rename(columns = {"level_3"  : "Month" , 0 : "Temp", "Name": "Country"})
-    df["Month"] = df["Month"].str[5:].astype(int)
-    df = pd.merge(df, stations, on = "ID")
-    df = df.drop(["ID", "STNELEV"], axis = 1)
-    df = df[["NAME", "LATITUDE", "LONGITUDE", "Country", "Year", "Month", "Temp"]]
-    df = df[df["Year"] <= year_end]
-    df = df[df["Year"] >= year_begin]
-    df = df[df["Country"] == country]
-    df = df[df["Month"] == month]
-    df["Temp"] = df["Temp"]/100
-    df.index = list(range(0,df.shape[0]))
-    return df
+        conn = sqlite3.connect("database.db")
+    
+        # write cmd first.
+        cmd = \
+        """
+        SELECT S.NAME, S.LATITUDE, S.LONGITUDE, C.Name, T.Year, T.Month, T.Temp
+        FROM temperatures T
+        LEFT JOIN stations S ON T.id = S.id
+        LEFT JOIN countries C on SUBSTRING (T.id, 1, 2) = C.`fips 10-4`
+        WHERE (T.Year BETWEEN ? AND ?) AND T.Month = ? AND C.Name = ?
+        """
+        # get our data from SQL.
+        df = pd.read_sql_query(cmd, conn, params = (year_begin, year_end,
+                                                    month, country))
+        df.rename(columns = {"Name": "Country"})
+        return df
 ```
->Let's try for the result.
+Let's try for the result.
 
 ```python
 query_climate_database(country = "India", 
@@ -83,27 +82,14 @@ query_climate_database(country = "India",
                        year_end = 2020,
                        month = 1)
 ```
+{% include filename.html %}
 
-```
-+----+---------------+------------+-------------+-----------+--------+---------+--------+
-|    | NAME          |   LATITUDE |   LONGITUDE | Country   |   Year |   Month |   Temp |
-+====+===============+============+=============+===========+========+=========+========+
-|  0 | PBO_ANANTAPUR |     14.583 |      77.633 | India     |   1980 |       1 |  23.48 |
-+----+---------------+------------+-------------+-----------+--------+---------+--------+
-|  1 | PBO_ANANTAPUR |     14.583 |      77.633 | India     |   1981 |       1 |  24.57 |
-+----+---------------+------------+-------------+-----------+--------+---------+--------+
-|  2 | PBO_ANANTAPUR |     14.583 |      77.633 | India     |   1982 |       1 |  24.19 |
-+----+---------------+------------+-------------+-----------+--------+---------+--------+
-|  3 | PBO_ANANTAPUR |     14.583 |      77.633 | India     |   1983 |       1 |  23.51 |
-+----+---------------+------------+-------------+-----------+--------+---------+--------+
-|  4 | PBO_ANANTAPUR |     14.583 |      77.633 | India     |   1984 |       1 |  24.81 |
-+----+---------------+------------+-------------+-----------+--------+---------+--------+
-```
 <br />
+Perfect.
 
 ---
 
-### 3. Write a Geographic Scatter Function for Yearly Temperature Increases
+## 3. Write a Geographic Scatter Function for Yearly Temperature Increases
 ```python
 from plotly import express as px
 import numpy as np
@@ -122,22 +108,27 @@ def temperature_coefficient_plot(country, year_begin, year_end, month, min_obs, 
     df = query_climate_database(country = country, 
                                 year_begin = year_begin, 
                                 year_end = year_end,
-                                month = month)   
+                                month = month)
+    # remove those stations whose number of years is smaller than min_obs.    
     df = df[df.groupby(["NAME"])["Year"].transform(len) >= min_obs]
+    # extract the variable we need, and calculate the yearly increase in temperature.
     df4 = pd.concat([df.groupby(["NAME"])["LATITUDE"].aggregate([np.mean]),
                      df.groupby(["NAME"])["LONGITUDE"].aggregate([np.mean]),
                      pd.DataFrame(df.groupby(["NAME"]).apply(coef))], axis=1)
+    # rename these column names.
     column_names = df4.columns.values
     column_names[0] = "LATITUDE"
     column_names[1] = "LONGITUDE"
     column_names[2] = "Estimated yearly increase(℃)"
     df4.columns = column_names
     df4["NAME"] = df4.index
+    # create a dictionary so that we can change number into specific month.
     month_dic = {1 : 'January', 2 : 'February', 3 : 'March', 4 : 'April',
                  5 : 'May', 6 : 'June', 7 : 'July', 8 : 'August', 
                  9 : 'September', 10 : 'October', 11 : 'November',
                  12 : 'December'}
     month = month_dic[int(month)]
+   # add title to our plot.
     title = "Estimates of yearly increase in temperature in {a} for stations in {b}, years {c} - {d}"\
             .format(a = month, b = country, c = year_begin, d = year_end)
     fig = px.scatter_mapbox(df4, 
@@ -151,9 +142,8 @@ def temperature_coefficient_plot(country, year_begin, year_end, month, min_obs, 
     return fig
 
 ```
-
->Let's try for the result.
-
+<br />
+Let's try for the result.
 ```python
 fig = temperature_coefficient_plot("India", 1980, 2020, 1, 
                                    min_obs = 10,
@@ -162,11 +152,112 @@ fig = temperature_coefficient_plot("India", 1980, 2020, 1,
                                    color_continuous_scale=color_map)
 fig.show()
 ```
-
+<br />
+Save this image as html, then upload it into github.
 ```python
 import plotly.io as pio
 pio.write_html(fig, file = "dv1.html", auto_open = True)
 ```
-{% include dv1.html %}
+
+ {% include dv1.html %}
+
+## 4. Create Two More Interesting Figures
+### (a). Monthly Changes in Temperature in Different Years in Different Regions
+```python
+def f(name, year1, year2, year3):
+    '''
+    This function shows multiple facets. The funnction have four
+    arguments. The meaning of this function is to plot three different
+    figures which can represent how temperature changed by month. 
+    '''
+    # connect to SQL database.
+    conn = sqlite3.connect("database.db") 
+    # write our CMD to extract data.
+    cmd = \
+    """
+    SELECT S.name, T.year, T.month, T.temp
+    FROM temperatures T
+    LEFT JOIN stations S ON T.id = S.id
+    WHERE S.name = ? and T.year = ?
+    """
+    df1 = pd.read_sql_query(cmd, conn, params = (name, year1))
+    df2 = pd.read_sql_query(cmd, conn, params = (name, year2))
+    df3 = pd.read_sql_query(cmd, conn, params = (name, year3))
+    # combine our data.
+    df = pd.concat([df1,df2,df3],axis=0)
+    # plot our data.
+    fig = px.line(data_frame = df, 
+                 x = "Month", 
+                 y = "Temp",
+                color = "Year",
+                facet_col = "Year",
+                  title = "Monthly Changes in Temperature in Different Years in " + str(name)
+                )
+    # show the plot
+    return fig
+
+fig = f("BRIANNA",1995,2002,2013)
+fig.show()
+```
+
+<br />
+Save our figure as html and show.
+```python
+import plotly.io as pio
+pio.write_html(fig, file = "dv2.html", auto_open = True)
+```
+
+{% include dv2.html %}
+
+<br />
+
+### (b). If STNELEV related to Temperature Between Two Time Periods
+
+<br />
+
+```python
+def g(year1, year2):
+    '''
+    This function have two arguments, every point in the scatter plot represent one station.
+    My goal is to compare if the STNELEV related to Temperature between two time periods.
+    '''
+    # connect to our database.
+    conn = sqlite3.connect("database.db") 
+    # write our CMD to extract data.
+    cmd = \
+    """
+    SELECT S.name, T.year, T.month, T.temp, S.STNELEV
+    FROM temperatures T
+    LEFT JOIN stations S ON T.id = S.id
+    WHERE T.year = ? or T.year = ?
+    """
+    df = pd.read_sql_query(cmd, conn, params = (year1, year2))
+    # use groupby to calculate the temperature in two different time period in every station.
+    df = pd.DataFrame({"Temp": df.groupby(["NAME","Year"])["Temp"].mean(), "STNELEV": df.groupby(["NAME","Year"])["STNELEV"].mean()})
+    df = df.reset_index()
+    # change variable "Year" to categorical variable. 
+    df['Year'] = df['Year'].astype(object)
+    fig = px.scatter(data_frame = df, 
+                 x = "Temp", 
+                 y = "STNELEV",
+                 color = "Year",
+                     trendline = "ols",
+                facet_col = "Year")
+    return fig
+
+fig = g(1995,2005)
+fig.show()
+```
+{% include dv3.html %}
+
+From our plot , we can see that in 1995, the function that can represent STNELEV related to Temperature
+is    STNELEV = $$-13.18 \times$$ Temp $$+724$$.
+
+However, in 2005, it changed to STNELEV = $$-18.1 \times$$ Temp $$+784$$.
+
+From above, we can see that, over the past ten years. The relationship between Temperatures and STNELEV changed a lot,
+if Temperature is higher, STNELEV will become lower.
+
+
 
 
