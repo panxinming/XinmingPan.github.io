@@ -24,6 +24,11 @@ In this blog post, I’m going to make a super cool web scraper. Here’s a [lin
 
 #### (a)
 First, I write a class to scrape. In this class there are three functions in total. First is parse().
+
+This function has two parts:
+- Find the next link, which represents the details of our Movie.
+- Once we get into next link, then we are supposed to use the next function to get the detail information of the actors.
+
 ```python
 def parse(self, response):
     '''The function has two variables one is self and another is response.
@@ -38,6 +43,10 @@ def parse(self, response):
 
 #### (b)
 This method works by another function parse_full_credits(), so I will introduce this funtion next.
+
+This function has three parts:
+- First, we get the next link so that we can go into actor's page.
+- Then, once we get into the next page, we need to use the next function to scrapy the information we need.
 
 ```python
 def parse_full_credits(self, response):
@@ -58,6 +67,11 @@ def parse_full_credits(self, response):
 
 #### (c)
 This method works by another function parse_actor_page(), so I will introduce this function.
+
+This function has three parts:
+- First, we extract the actor's name.
+- Then, we are going to extract the movie the actor has worked before.
+- Last step, we are going to extract all we need and give them a name. After we done, we are going to put everything we just extract into CSV file.
 
 
 ```python
@@ -135,6 +149,7 @@ scrapy crawl imdb_spider -o results.csv
 <br />
 Then, I plan to create a table.
 
+This part is about data cleaning step. Because the information we extract is not sortable. So, I use some code so sort the data, so that we can see which movie has the most shared actors.
 ```python
 import pandas
 data = pandas.read_csv("results.csv")
