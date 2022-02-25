@@ -5,7 +5,15 @@ title: Blog Post 3
 
 
 ## Web Scraping
+What’s your favorite movie or TV show? Wouldn’t it be nice to find more shows that you might like to watch, based on ones you know you like? Tools that address questions like this are often called “recommender systems.” Powerful, scalable recommender systems are behind many modern entertainment and streaming services, such as Netflix and Spotify. While most recommender systems these days involve machine learning, there are also ways to make recommendations that don’t require such complex tools.
 
+In this Blog Post, we’ll use webscraping to answer the following question:
+
+>**What movie or TV shows share actors with your favorite movie or show?**
+
+The idea of this question is that, if TV show Y has many of the same actors as TV show X, and you like X, you might also enjoy Y.
+
+This post has two parts. In the first, larger part, we’ll write a webscraper for finding shared actors on IMDB. In the second, smaller part, we’ll use the results from your scraper to make recommendations.
 
 ### 1. First Part
 My favourite TV in IMDB is an anime, ***Sword Art Online***. So, in this blog, I am going to scrape the actors information and show the result here.
