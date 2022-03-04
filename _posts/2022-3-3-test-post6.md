@@ -20,9 +20,7 @@ import numpy as np
 
 train_url = "https://github.com/PhilChodrow/PIC16b/blob/master/datasets/fake_news_train.csv?raw=true"
 df = pd.read_csv(train_url, header=0, index_col=0)
-df
 ```
-{% include my_html.html %}
 
 ## (B). Make a Dataset
 Write a function called make_dataset. This function should do two things:
@@ -411,10 +409,10 @@ fig.show()
 
 Our text classification model's word embedding has some bias.
 
-- Words like "cyber", "oil", "died","alliance" are more closely located to "China".
+- Words like "Trump" are more closely located to "China".
 - Words like "guns", "voting", "offensive" are more closely located to "Trump".
 
 Where did these biases come from?
 
-- Many news in United States prefer to announce the bad information about China or China threat theory。
+- Trump mentioned China many times during news conference.
 - Trump is not liked by most of United States Citizen. So, many bad news may come through him, Like "Guns", "offensive". However, gun crime is not only the problem when Trump is president, but also other presidents.
