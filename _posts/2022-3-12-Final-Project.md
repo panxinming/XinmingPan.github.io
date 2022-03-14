@@ -13,7 +13,7 @@ Besides these, we learned every algorithm may has bias, what we need to do is to
 
 - **What are two aspects of your project that you are especially proud of?**
 
->The **first** part we are proud of is the WebApp we created. Because we don't know how to apply machine learning into WebApp design, but finally we did it! We created a beautiful WebApp and our WebApp can run the code we written. And I think our App is very useful, it can help patients who has potential breast cancer to detect at home or online. The **second** part we are proud of is 
+>The **first** part we are proud of is the WebApp we created. Because we don't know how to apply machine learning into WebApp design, but finally we did it! We created a beautiful WebApp and our WebApp can run the code we written. And I think our App is very useful, it can help patients who has potential breast cancer to detect at home or online. The **second** part we are proud of is the dimension reduction, we learned PCA in UCLA, but here we want to use another dimension reduction method which is T-SNE, we searched in Google and ask for someone else to explain how to apply T-SNE in Python. Finally, we got this. So, we are very proud of the dimension reduction we did.
 
 
 - **What are two things you would suggest doing to further improve your project? (You are not responsible for doing those things.)** 
