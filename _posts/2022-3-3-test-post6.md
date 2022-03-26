@@ -1,10 +1,9 @@
 ---
 layout: post
-title: Blog Post 6
+title: Fake News Classification
 ---
 
 
-## Fake News Classification
 In this Blog Post, we will develop and assess a fake news classifier using Tensorflow.
 Our data for this assignment comes from the article
 
