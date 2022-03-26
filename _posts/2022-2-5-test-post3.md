@@ -1,10 +1,9 @@
 ---
 layout: post
-title: Blog Post 3
+title: Web Scraping
 ---
 
 
-## Web Scraping
 What’s your favorite movie or TV show? Wouldn’t it be nice to find more shows that you might like to watch, based on ones you know you like? Tools that address questions like this are often called “recommender systems.” Powerful, scalable recommender systems are behind many modern entertainment and streaming services, such as Netflix and Spotify. While most recommender systems these days involve machine learning, there are also ways to make recommendations that don’t require such complex tools.
 
 In this Blog Post, we’ll use webscraping to answer the following question:
