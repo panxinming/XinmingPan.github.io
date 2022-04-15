@@ -54,6 +54,7 @@ During free time, I love watching anime. My favourite anime is [Sword Art Online
 	- **Tensorflow**
 		- Generative Adversarial Networks (GAN)
 	- Principal Component Analysis (PCA)
+	- Natural Language Processing(NLP)
 
 3. ***Reinforcement Learning***
     - Monte Carlo learning
