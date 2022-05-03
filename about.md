@@ -43,18 +43,18 @@ During free time, I love watching anime. My favourite anime is [Sword Art Online
 	- [Decision Tree](https://panxinming.github.io/test-post10/)
 	- [K-Nearest Neighborhood (KNN)](https://panxinming.github.io/test-post11/)
 	- [Random Forest](https://panxinming.github.io/test-post12/)
-	- Support Vector Machine (SVM)
+	- [Support Vector Machine (SVM)](https://panxinming.github.io/test-post18/)
 	- **Tensorflow**
-		- Convolutional Neural Network (CNN)
+		- [Convolutional Neural Network (CNN)](https://panxinming.github.io/test-post16/)
 		- Recurrent Neural Networks (RNN)
 
 
 2. ***Unsupervised Learning***
-	- K-mean
+	- [K-mean](https://panxinming.github.io/test-post13/)
 	- **Tensorflow**
 		- Generative Adversarial Networks (GAN)
+		- [Natural Language Processing(NLP)](https://panxinming.github.io/test-post17/)
 	- Principal Component Analysis (PCA)
-	- Natural Language Processing(NLP)
 
 3. ***Reinforcement Learning***
     - Monte Carlo learning
