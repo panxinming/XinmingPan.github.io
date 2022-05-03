@@ -1,11 +1,10 @@
 ---
 layout: post
-title: Fake News Classification
+title: Natural Language Processing 2
 ---
 
 
-In this Blog Post, we will develop and assess a fake news classifier using Tensorflow.
-Our data for this assignment comes from the article
+In this Post, we will develop and assess a fake news classifier using Tensorflow. Our data for this post comes from the article
 
 >Ahmed H, Traore I, Saad S. (2017) “Detection of Online Fake News Using N-Gram Analysis and Machine Learning Techniques. In: Traore I., Woungang I., Awad A. (eds) Intelligent, Secure, and Dependable Systems in Distributed and Cloud Environments. ISDDC 2017. Lecture Notes in Computer Science, vol 10618. Springer, Cham (pp. 127-138).
 
@@ -310,108 +309,8 @@ both_model.evaluate(test_dataset)
 
 It gives us 98.61% accuracy. It's very nice.
 
-## (E). Embedding Visualization
-Visualize and comment on the embedding that our model learned. We are able to find some interesting patterns or associations in the words that the model found useful when distinguishing real news from fake news.
-
-```python
-weights = both_model.get_layer('embedding').get_weights()[0] # get the weights from the embedding layer
-vocab = vectorize_layer.get_vocabulary() # get the vocabulary from our data prep for later
-weights
-```
-```
-array([[-4.3807211e-03,  3.3131484e-03,  2.5179882e-02],
-       [ 3.0498058e-01,  2.1129368e-01, -5.3251249e-01],
-       [-4.7779570e+00, -4.9961200e+00,  4.7236590e+00],
-       ...,
-       [ 8.3289188e-01,  1.0012127e+00, -1.2732483e+00],
-       [ 1.0635720e+00,  1.0107019e+00, -9.6477473e-01],
-       [ 4.0210972e+00,  4.0266252e+00, -4.2613201e+00]], dtype=float32)
-```
-
-The collection of weights is 3-dimensional. For plotting in 2 dimensions, we have several choices for how to reduce the data to a 2d representation. A very simple and standard approach is our friend, principal component analysis (PCA).
-```python
-from sklearn.decomposition import PCA
-pca = PCA(n_components=2)
-weights = pca.fit_transform(weights)
-# Now we'll make a data frame from our results:
-embedding_df = pd.DataFrame({
-    'word' : vocab, 
-    'x0'   : weights[:,0],
-    'x1'   : weights[:,1]
-})
-embedding_df
-```
-
-{% include hhh.html %}
 
 
-Ready to plot! Note that the embedding appear to be "stretched out" in three directions, with one direction corresponding to each of the three categories (tech, style, science).
-```python
-import plotly.express as px 
-fig = px.scatter(embedding_df, 
-                 x = "x0", 
-                 y = "x1", 
-                 size = list(np.ones(len(embedding_df))),
-                 size_max = 2,
-                 hover_name = "word")
+## (E). Conclusion
 
-fig.show()
-```
-
-{% include fake3.html %}
-
-Cool, we made a word embedding! This embedding seems to have learned some reasonable associations.
-
-
-Whenever we create a machine learning model that might conceivably have impact on the thoughts or actions of human beings, we have a responsibility to understand the limitations and biases of that model. Biases can enter into machine learning models through several routes, including the data used as well as choices made by the modeler along the way.
-
-With these considerations in mind, let's see what kinds of words our model associates with China and Trump.
-
-```python
-country = ["china"]
-people = ["trump"]
-
-highlight_1 = ["cyber", "oil", "died","alliance"]
-highlight_2 = ["guns", "voting", "offensive"]
-
-def gender_mapper(x):
-    if x in country:
-        return 1
-    elif x in people:
-        return 4
-    elif x in highlight_1:
-        return 3
-    elif x in highlight_2:
-        return 2
-    else:
-        return 0
-
-embedding_df["highlight"] = embedding_df["word"].apply(gender_mapper)
-embedding_df["size"]      = np.array(1.0 + 50*(embedding_df["highlight"] > 0))
-```
-
-```python
-import plotly.express as px 
-
-fig = px.scatter(embedding_df, 
-                 x = "x0", 
-                 y = "x1", 
-                 color = "highlight",
-                 size = list(embedding_df["size"]),
-                 size_max = 10,
-                 hover_name = "word")
-
-fig.show()
-```
-
-{% include fake4.html %}
-
-Our text classification model's word embedding has some bias.
-
-- Words like "Trump" are more closely located to "China".
-- Words like "guns", "voting", "offensive" are more closely located to "Trump".
-
-Where did these biases come from?
-
-- Trump mentioned China many times during news conference.
-- Trump is not liked by most of United States Citizen. So, many bad news may come through him, Like "Guns", "offensive". However, gun crime is not only the problem when Trump is president, but also other presidents.
+This is how Natural Language Processing works in Text Classification. I will discuss more NLP models in later post.
