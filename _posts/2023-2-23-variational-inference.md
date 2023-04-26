@@ -9,13 +9,11 @@ Variational inference is a technique for approximating intractable posterior dis
 Mathematically, we can write the problem of variational inference as follows. Given observed data $x$ and a prior distribution $p(z)$ over latent variables $z$, we want to compute the posterior distribution $p(z|x)$. However, this posterior is often intractable to compute directly. Instead, we introduce a family of variational distributions $q(z|\theta)$ parameterized by $\theta$, and minimize the Kullback-Leibler (KL) divergence between $q(z|\theta)$ and $p(z|x)$:
 
 
-$$\begin{equation}\min_{\theta} \mathrm{KL}(q(z|\theta) || p(z|x)),\end{equation}$$
+$$\min_{\theta} \mathrm{KL}(q(z|\theta) || p(z|x))$$
 
 where
 
-$$\begin{equation}
-\mathrm{KL}(q(z|\theta) || p(z|x)) = \int q(z|\theta) \log \frac{q(z|\theta)}{p(z|x)} dz.
-\end{equation}$$
+$$\mathrm{KL}(q(z|\theta) || p(z|x)) = \int q(z|\theta) \log \frac{q(z|\theta)}{p(z|x)} dz$$
 
 This optimization problem can be solved using various techniques, such as gradient descent, stochastic gradient descent, or variational EM. The resulting variational distribution $q(z|\theta^*)$ can then be used as an approximation to the true posterior distribution $p(z|x)$.
 
