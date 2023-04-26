@@ -13,7 +13,9 @@ distribution $$p(z|x)$$. However, this posterior is often intractable to compute
 
 $$\min_{\theta} \mathrm{KL}(q(z|\theta) || p(z|x))$$
 
-where $$\mathrm{KL}(q(z|\theta) || p(z|x)) = \int q(z|\theta) \log \frac{q(z|\theta)}{p(z|x)}dz$$
+where 
+
+$$\mathrm{KL}(q(z|\theta) || p(z|x)) = \int q(z|\theta) \log \frac{q(z|\theta)}{p(z|x)}dz$$
 
 
 This optimization problem can be solved using various techniques, such as gradient descent, stochastic gradient descent, or variational EM. The resulting variational distribution $$q(z|\theta^*)$$ can then
