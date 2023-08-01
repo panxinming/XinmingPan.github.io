@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Guassian Process
+title: Bayesian Neural Network
 ---
 
 
