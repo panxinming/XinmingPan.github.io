@@ -10,6 +10,9 @@ Hi, this is Xinming Pan. I got my bachelor degree in UCLA and I am a graduate st
 
 During free time, I love watching anime. My favourite anime is [Sword Art Online](https://en.wikipedia.org/wiki/Sword_Art_Online). Also, I love playing video games. I pretty love Nintendo games. My favourite video game is [The Legend of Zelda: Breath of the Wild](https://en.wikipedia.org/wiki/The_Legend_of_Zelda:_Breath_of_the_Wild).
 
+My research area is about the optimzation in Bayesian Neural Network. Currently, I am working at BYD car company as an engineer. My job is related to simulation, prediction, emulation, data science....
+
+
 ### Contact me
 
 - [471836430@qq.com](mailto:471836430@qq.com)
@@ -26,7 +29,7 @@ During free time, I love watching anime. My favourite anime is [Sword Art Online
 
 
 
-![ML.png]({{ site.baseurl }}/images/ML.png)
+
 
 
 <br />
@@ -35,28 +38,3 @@ During free time, I love watching anime. My favourite anime is [Sword Art Online
 
 <br />
 
-
-
-1. ***Supervised Learning***
-	- [Linear Regression](https://panxinming.github.io/test-post9/)
-	- [Logistic Regression](https://panxinming.github.io/test-post7/)
-	- [Decision Tree](https://panxinming.github.io/test-post10/)
-	- [K-Nearest Neighborhood (KNN)](https://panxinming.github.io/test-post11/)
-	- [Random Forest](https://panxinming.github.io/test-post12/)
-	- [Support Vector Machine (SVM)](https://panxinming.github.io/test-post18/)
-	- **Tensorflow**
-		- [Convolutional Neural Network (CNN)](https://panxinming.github.io/test-post16/)
-		- Recurrent Neural Networks (RNN)
-
-
-2. ***Unsupervised Learning***
-	- [K-mean](https://panxinming.github.io/test-post13/)
-	- **Tensorflow**
-		- Generative Adversarial Networks (GAN)
-		- [Natural Language Processing(NLP)](https://panxinming.github.io/test-post17/)
-	- Principal Component Analysis (PCA)
-
-3. ***Reinforcement Learning***
-    - Monte Carlo learning
-    - Q-Learning
-    - State–action–reward–state–action (SARSA)
